@@ -190,7 +190,8 @@
 							</a>
 						</li>
 						<li class="nav-item">
-							<a href="forms.html">
+							<!--<a href="forms.html">-->
+								<a href="{% url 'orgmember-list' %}">	
 								<i class="la la-keyboard-o"></i>
 								<!--<p>Forms</p>
 								<span class="badge badge-count">50</span>-->
@@ -198,7 +199,8 @@
 							</a>
 						</li>
 						<li class="nav-item">
-							<a href="tables.html">
+							<!--<a href="tables.html">-->
+								<a href="{% url 'student-list' %}">	
 								<i class="la la-th"></i>
 								<!--<p>Tables</p>
 								<span class="badge badge-count">6</span>-->
@@ -206,7 +208,8 @@
 							</a>
 						</li>
 						<li class="nav-item">
-							<a href="notifications.html">
+								<!-- <a href="notifications.html"> -->
+								<a href="{% url 'college-list' %}">
 								<i class="la la-bell"></i>
 								<!--<p>Notifications</p>
 								<span class="badge badge-success">3</span>-->
@@ -214,9 +217,10 @@
 							</a>
 						</li>
 						<li class="nav-item active">
-							<a href="typography.html">
+							<!-- <a href="typography.html"> -->
+								<a href="{% url 'program-list' %}">
 								<i class="la la-font"></i>
-								<p>Typography</p>
+								<p>Program</p>
 								<span class="badge badge-danger">25</span>
 							</a>
 						</li>
