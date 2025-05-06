@@ -1,0 +1,439 @@
+{% extends 'base.html' %} {% load static %} {% block content %}
+<div class="page-inner">
+    <h4 class="page-title">Chart.js</h4>
+    <div class="page-category">Simple yet flexible JavaScript charting for designers & developers. Please checkout their <a href="https://www.chartjs.org/" target="_blank">full documentation</a>.</div>
+    <div class=""page-inner>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">Pie Chart</div>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-container">
+                            <canvas id="chart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">Line Chart</div>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-container">
+                            <canvas id="lineChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+            
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">Horizontal Chart</div>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-container">
+                            <canvas id="horizontalChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">Doughnut Chart</div>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-container">
+                            <canvas id="doughnutChart" style="width: 50%; height: 100%"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">Scatter Chart</div>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-container">
+                            <canvas id="scatterChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        
+        <!-- <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">Bubble Chart</div>
+                </div>
+                <div class="card-body">
+                    <div class="chart-container">
+                        <canvas id="bubbleChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div> -->
+        <!-- <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">Multiple Line Chart</div>
+                </div>
+                <div class="card-body">
+                    <div class="chart-container">
+                        <canvas id="multipleLineChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">Multiple Bar Chart</div>
+                </div>
+                <div class="card-body">
+                    <div class="chart-container">
+                        <canvas id="multipleBarChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div> -->
+        <!-- <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">Chart with HTML Legends</div>
+                </div>
+                <div class="card-body">
+                    <div class="card-sub">Sometimes you need a very complex legend. In these cases, it 
+                    makes sense to generate an HTML legend. Charts provide a generateLegend() method on their
+                    prototype that returns an HTML string for the legend.</div>
+                    <div class="chart-container">
+                        <canvas id="htmlLegendsChart"></canvas>
+                    </div>
+                    <div id="myChartLegend"></div>
+                </div>
+            </div>
+        </div> -->
+    </div>
+</div>
+{% endblock %} {% block chart %}
+<script>
+    function loadChartData() {
+        // pieChart
+        fetch("/chart/")
+            .then((response) => response.json())
+            .then((data) => {
+                var programs = Object.keys(data);  // Extract program names (labels)
+                var studentCounts = Object.values(data);  // Extract student counts
+
+                var pieChart = document.getElementById("chart").getContext("2d");  // Canvas element with ID 'chart'
+
+                new Chart(pieChart, {
+                    type: "pie",
+                    data: {
+                        datasets: [
+                            {
+                                data: studentCounts,  // Data from the backend (student counts)
+                                backgroundColor: ["#1d7af3", "#f3545d", "#fdaf4b", "#28a745", "#6f42c1"],  // Customize colors
+                                borderWidth: 0,
+                            },
+                        ],
+                        labels: programs,  // Program names as labels for the pie chart
+                    },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    legend: {
+                        position: "bottom",
+                        labels: {
+                            fontColor: "rgb(154, 154, 154)",
+                            fontSize: 11,
+                            usePointStyle: true,
+                            padding: 20,
+                        },
+                    },
+                    pieceLabel: {
+                        render: "percentage",  // Display percentage in the chart segments
+                        fontColor: "white",
+                        fontSize: 14,
+                    },
+                    tooltips: {
+                        callbacks: {
+                            label: function(tooltipItem) {
+                                return programs[tooltipItem.index] + ": " + studentCounts[tooltipItem.index] + " students";
+                            },
+                        },
+                    },
+                    layout: {
+                        padding: {
+                            left: 20,
+                            right: 20,
+                            top: 20,
+                            bottom: 20,
+                        },
+                    },
+                },
+            });
+        })
+        .catch((error) => console.error("Error:", error));
+
+        // lineChart
+        fetch("/lineChart/")
+            .then((response) => response.json())
+            .then((result_with_month_names) => {
+                var months = Object.keys(result_with_month_names);
+                var counts = Object.values(result_with_month_names);
+                var lineChart = document.getElementById("lineChart").getContext("2d");
+
+                new Chart(lineChart, {
+                    type: "line",
+                    data: {
+                        labels: months,
+                        datasets: [
+                            {
+                                label: "Active Users",
+                                borderColor: "#1d7af3",
+                                pointBorderColor: "#FFF",
+                                pointBackgroundColor: "#1d7af3",
+                                pointBorderWidth: 2,
+                                pointHoverRadius: 4,
+                                pointHoverBorderWidth: 1,
+                                pointRadius: 4,
+                                backgroundColor: "transparent",
+                                fill: true,
+                                borderWidth: 2,
+                                data: counts,
+                            },
+                        ],
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        legend: {
+                            position: "bottom",
+                            labels: {
+                                padding: 10,
+                                fontColor: "#1d7af3",
+                            },
+                        },
+                        tooltips: {
+                            bodySpacing: 4,
+                            mode: "nearest",
+                            intersect: 0,
+                            position: "nearest",
+                            xPadding: 10,
+                            yPadding: 10,
+                            caretPadding: 10,
+                        },
+                        layout: {
+                            padding: { left: 15, right: 15, top: 15, bottom: 15 },
+                        },
+                    },
+                });
+            })
+            .catch((error) => console.error("Error:", error));
+
+        // Horizontal Bar Chart
+        fetch("/horizontalChart/")
+            .then((response) => response.json())
+            .then((data) => {
+                var severityLevels = Object.keys(data);
+                var counts = Object.values(data);
+                var barChart = document.getElementById("horizontalChart").getContext("2d");
+
+                new Chart(barChart, {
+                    type: "bar",
+                    data: {
+                        datasets: [
+                            {
+                                data: counts,
+                                backgroundColor: "#1d7af3",
+                                borderColor: "#1d7af3",
+                                borderWidth: 0,
+                            },
+                        ],
+                        labels: severityLevels,
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        indexAxis: "y",
+                        legend: {
+                            display: false,
+                        },
+                        tooltips: {
+                            enabled: true,
+                            callbacks: {
+                                label: function(tooltipItem) {
+                                    return `${tooltipItem.label}: ${tooltipItem.raw}`;
+                                },
+                            },
+                        },
+                        layout: {
+                            padding: {
+                                left: 20,
+                                right: 20,
+                                top: 20,
+                                bottom: 20,
+                            },
+                        },
+                        scales: {
+                            x: {
+                                beginAtZero: true,
+                            },
+                            y: {
+                                ticks: {
+                                    fontColor: "rgb(154, 154, 154)",
+                                    fontSize: 12,
+                                },
+                            },
+                        },
+                    },
+                });
+            })
+            .catch((error) => console.error("Error:", error));
+
+        // doughnut chart
+        fetch("/doughnutChart/")
+            .then((response) => response.json())
+            .then((data) => {
+                var collegeNames = Object.keys(data);
+                var studentCounts = Object.values(data);
+
+                var totalStudents = studentCounts.reduce((a, b) => a + b, 0);
+
+                var percentages = studentCounts.map(count => ((count / totalStudents) * 100).toFixed(2));
+
+                var doughnutChart = document.getElementById("doughnutChart").getContext("2d");
+
+                new Chart(doughnutChart, {
+                    type: "doughnut",
+                    data: {
+                        datasets: [
+                            {
+                                data: studentCounts,
+                                backgroundColor: ["#1d7af3", "#f3545d", "#fdaf4b", "#28a745", "#6f42c1"],
+                                borderWidth: 0,
+                            },
+                        ],
+                        labels: collegeNames,
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        legend: {
+                            position: "bottom",
+                            labels: {
+                                fontColor: "rgb(154, 154, 154)",
+                                fontSize: 11,
+                            },
+                        },
+                        tooltips: {
+                            enabled: true,
+                            callbacks: {
+                                label: function(tooltipItem) {
+                                    var college = tooltipItem.label;
+                                    var count = tooltipItem.raw;
+                                    var percentage = percentages[tooltipItem.index];
+                                    return `${college}: ${count} students (${percentage}%)`;
+                                },
+                            },
+                        },
+                        layout: {
+                            padding: {
+                                left: 20,
+                                right: 20,
+                                top: 20,
+                                bottom: 20,
+                            },
+                        },
+                    },
+                });
+            })
+            .catch((error) => console.error("Error:", error));
+
+        // Polar Area Chart
+        fetch("/scatterChart/")
+            .then((response) => response.json())
+            .then((data) => {
+                var scatterChart = document.getElementById("scatterChart").getContext("2d");
+
+                new Chart(scatterChart, {
+                    type: "scatter",
+                    data: {
+                        labels: data.labels,
+                        datasets: [{
+                            label: data.datasets[0].label,
+                            data: data.datasets[0].data,
+                            backgroundColor: data.datasets[0].backgroundColor,
+                            borderColor: '#fff',
+                            borderWidth: 1,
+                            pointRadius: 8,
+                            pointHoverRadius: 12
+                        }]
+                    },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Number of Organizations'
+                            },
+                            beginAtZero: true
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Number of Students'
+                            },
+                            beginAtZero: true
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                fontColor: "rgb(154, 154, 154)",
+                                fontSize: 11,
+                                usePointStyle: true,
+                                padding: 20
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return [
+                                        `College: ${context.parsed.x} orgs, ${context.parsed.y} students`,
+                                        data.labels[context.dataIndex]
+                                    ];
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        })
+        .catch((error) => console.error("Error:", error));
+    }
+
+    loadChartData();
+</script>
+
+{% endblock %}

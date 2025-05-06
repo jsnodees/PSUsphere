@@ -16,7 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, re_path
-from studentorg.views import HomePageView, OrganizationList, OrganizationCreateView, OrganizationUpdateView, OrganizationDeleteView, StudentList, StudentCreateView, StudentUpdateView, StudentDeleteView, OrgMemberList, OrgMemberCreateView, OrgMemberUpdateView, OrgMemberDeleteView, CollegeList, CollegeCreateView, CollegeUpdateView, CollegeDeleteView, ProgramList, ProgramCreateView, ProgramUpdateView, ProgramDeleteView
+from studentorg.views import HomePageView, OrganizationList, OrganizationCreateView, OrganizationUpdateView, OrganizationDeleteView, StudentList, StudentCreateView, StudentUpdateView, StudentDeleteView, OrgMemberList, OrgMemberCreateView, OrgMemberUpdateView, OrgMemberDeleteView, CollegeList, CollegeCreateView, CollegeUpdateView, CollegeDeleteView, ProgramList, ProgramCreateView, ProgramUpdateView, ProgramDeleteView, ChartView, PieCountStudentsPerProgram, LineCountbyMonth, HorizontalBarChart, DoughnutChart, RankedOrganizationChart
 from studentorg import views
 from django.contrib.auth import views as auth_views
 
@@ -52,4 +52,10 @@ urlpatterns = [
     path('program_list/add', ProgramCreateView.as_view(), name='program-add'),
     path('program_list/<pk>',ProgramUpdateView.as_view(), name='program-update'),
     path('program_list/<pk>/delete', ProgramDeleteView.as_view(), name='program-delete'),
+    path('dashboard_chart', ChartView.as_view(), name='dashboard-chart'),
+    path('chart/', PieCountStudentsPerProgram, name='chart'),
+    path('lineChart/', LineCountbyMonth, name='chart'),
+    path('horizontalChart/', HorizontalBarChart, name='chart'),
+    path('doughnutChart/', DoughnutChart, name='chart'),
+    path('scatterChart/', RankedOrganizationChart, name='chart'),
 ]
